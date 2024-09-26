@@ -1,0 +1,32 @@
+services:  
+  main:
+    build: main/
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+      - hook
+    environment:
+      - REDIS_URL=redis:6379
+    networks:
+      - requests-network
+
+  hook:
+    build: hook/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis:6379
+    networks:
+      - requests-network
+
+  redis:
+    image: "redis:alpine"
+    networks:
+      - requests-network
+
+networks:
+  requests-network:
+    driver: bridge

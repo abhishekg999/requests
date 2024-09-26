@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h1>Requests</h1>
+    <code> {{bin}}</code>
+
+    <ul id="requests">
+    </ul>
+
+    <script defer>
+        const ws = new WebSocket('ws://' + window.location.host + '/ws');
+        ws.onmessage = function (event) {
+            const requests = JSON.parse(event.data);
+            const requestsList = document.getElementById('requests');
+            const li = document.createElement('li');
+            li.textContent = requests['URL'];
+            requestsList.appendChild(li);
+
+        };
+    </script>
+</body>
+
+</html>
