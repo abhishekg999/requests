@@ -21,7 +21,7 @@ export const App = () => {
       .then(response => response.json())
       .then(data => setBinId(data.bin));
 
-    const ws = new WebSocket(`ws://${window.location.host}/ws`);
+    const ws = new WebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws`);
     ws.onmessage = (event) => {
       const newRequest = JSON.parse(event.data);
       setRequests(prevRequests => [newRequest, ...prevRequests]);
