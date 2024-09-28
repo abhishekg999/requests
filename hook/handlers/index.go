@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -30,13 +29,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for key := range r.Header {
-		fmt.Println(key, ":", r.Header.Get(key))
-	}
-
-	headers := http.Header{}
-	for key := range response.Headers {
-		if !(strings.HasPrefix(key, "Cf-") || key == "Cdn-Loop" || key == "X-Real-IP" || key == "X-Forwarded-For" || key == "X-Forwarded-Proto") {
-			headers.Add(key, response.Headers[key])
+		if strings.HasPrefix(key, "Cf-") || key == "Cdn-Loop" || key == "X-Real-IP" || key == "X-Forwarded-For" || key == "X-Forwarded-Proto" {
+			r.Header.Del(key)
 		}
 	}
 
@@ -46,7 +40,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		Path:    r.URL.Path,
 		Sender:  r.Header.Get("X-Real-IP"),
 		Query:   r.URL.Query(),
-		Headers: headers,
+		Headers: r.Header,
 		Body:    string(body),
 		Time:    time.Now(),
 	})
