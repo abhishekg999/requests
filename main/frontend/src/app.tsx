@@ -38,19 +38,27 @@ export const App = () => {
     }
   }, [requests]);
 
-  const filteredRequests = requests.filter(request => 
+  const filteredRequests = requests.filter(request =>
     request.Method.toLowerCase().includes(filterMethod.toLowerCase()) &&
     (request.URL.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     request.Method.toLowerCase().includes(searchTerm.toLowerCase()))
+      request.Method.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
     <div className="flex h-screen bg-gray-100">
       <div className="w-1/3 bg-white p-6 overflow-auto">
-        <h1 className="text-2xl font-bold mb-4">RequestBin</h1>
-        <p className="mb-4">Bin ID: {binId}</p>
-        <p className="mb-4">Endpoint: {binId}.r.ahh.local</p>
-        
+        <h1 className="text-2xl font-bold mb-4">HTTP Request Bin</h1>
+        {
+          binId && (
+            <>
+              <p className="mb-4">Bin ID: {binId}</p>
+              <p className="mb-4">Endpoint: {' '}
+                <a href={`http://${binId}.r.ahh.bet`}>{binId}.r.ahh.bet</a>
+              </p>
+            </>
+          )
+        }
+
         <div className="mb-4 flex">
           <div className="relative flex-grow">
             <input
@@ -77,13 +85,12 @@ export const App = () => {
             <Filter className="absolute left-2 top-2 text-gray-400" size={20} />
           </div>
         </div>
-        
+
         {filteredRequests.map((request, index) => (
           <div
             key={index}
-            className={`p-2 mb-2 rounded cursor-pointer ${
-              selectedRequest === request ? 'bg-blue-100' : 'hover:bg-gray-100'
-            }`}
+            className={`p-2 mb-2 rounded cursor-pointer ${selectedRequest === request ? 'bg-blue-100' : 'hover:bg-gray-100'
+              }`}
             onClick={() => setSelectedRequest(request)}
           >
             <div className="font-bold">{request.Method} {request.URL}</div>

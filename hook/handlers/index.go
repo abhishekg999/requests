@@ -32,7 +32,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		Method:  r.Method,
 		URL:     r.URL.String(),
 		Path:    r.URL.Path,
-		Sender:  r.RemoteAddr,
+		Sender:  r.Header.Get("X-Real-IP"),
 		Query:   r.URL.Query(),
 		Headers: r.Header,
 		Body:    string(body),
