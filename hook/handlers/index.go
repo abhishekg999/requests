@@ -28,6 +28,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		body = []byte{}
 	}
 
+	Sender := r.Header.Get("X-Real-IP")
+
 	for key := range r.Header {
 		key_lower := strings.ToLower(key)
 		if strings.HasPrefix(key_lower, "cf-") || key_lower == "cdn-loop" || key_lower == "x-real-ip" || key_lower == "x-forwarded-for" || key_lower == "x-forwarded-proto" {
@@ -39,7 +41,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		Method:  r.Method,
 		URL:     r.URL.String(),
 		Path:    r.URL.Path,
-		Sender:  r.Header.Get("X-Real-IP"),
+		Sender:  Sender,
 		Query:   r.URL.Query(),
 		Headers: r.Header,
 		Body:    string(body),
