@@ -2,7 +2,7 @@
 
 To self-host:
 ```console
-docker compose -f docker-compose.prod.yml up
+docker compose -f docker-compose.prod.yml up -d --force-recreate
 ```
 
 Main page runs on `http://localhost:5000`. 
