@@ -29,7 +29,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for key := range r.Header {
-		if strings.HasPrefix(key, "Cf-") || key == "Cdn-Loop" || key == "X-Real-IP" || key == "X-Forwarded-For" || key == "X-Forwarded-Proto" {
+		key_lower := strings.ToLower(key)
+		if strings.HasPrefix(key_lower, "cf-") || key_lower == "cdn-Loop" || key_lower == "x-real-ip" || key_lower == "x-forwarded-for" || key_lower == "x-forwarded-proto" {
 			r.Header.Del(key)
 		}
 	}
