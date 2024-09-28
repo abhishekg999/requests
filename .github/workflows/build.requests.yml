@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - master
-      - workflow
 
 env:
-  NAME: "requests-hook"
+  NAME: "requests"
   REGISTRY: ghcr.io
 
 jobs:
@@ -36,4 +35,11 @@ jobs:
       with:
         context: hook/
         tags: ${{ env.REGISTRY }}/${{ github.actor }}/requests-hook:latest
+        push: true
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: main/
+        tags: ${{ env.REGISTRY }}/${{ github.actor }}/requests-main:latest
         push: true
