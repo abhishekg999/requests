@@ -28,6 +28,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		body = []byte{}
 	}
 
+	for key := range response.Headers {
+		if strings.HasPrefix(key, "Cf-") || key == "Cdn-Loop" || key == "X-Real-IP" || key == "X-Forwarded-For" || key == "X-Forwarded-Proto" {
+			r.Header.Del(key)
+		}
+	}
+
 	db.PublishRequest(bin, db.Request{
 		Method:  r.Method,
 		URL:     r.URL.String(),
