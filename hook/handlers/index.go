@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -36,7 +37,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	for key, values := range r.Header {
 		for _, value := range values {
-			println(key, value)
+			fmt.Println("Header:", key, value)
 		}
 	}
 
