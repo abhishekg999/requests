@@ -1,0 +1,32 @@
+services:
+  main:
+    image: ghcr.io/abhishekg999/requests-main:latest
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+      - hook
+    environment:
+      - REDIS_URL=redis:6379
+    networks:
+      - requests-network
+
+  hook:
+    image: ghcr.io/abhishekg999/requests-hook:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis:6379
+    networks:
+      - requests-network
+
+  redis:
+    image: "redis:alpine"
+    networks:
+      - requests-network
+
+networks:
+  requests-network:
+    driver: bridge
