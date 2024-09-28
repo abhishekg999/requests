@@ -34,6 +34,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	for key, values := range r.Header {
+		for _, value := range values {
+			println(key, value)
+		}
+	}
+
 	db.PublishRequest(bin, db.Request{
 		Method:  r.Method,
 		URL:     r.URL.String(),
