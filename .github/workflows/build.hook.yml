@@ -1,0 +1,31 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+      - workflow
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to GitHub Container Registry
+      run: |
+        echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u abhishekg999 --password-stdin
+
+    - name: Build and push Docker images
+      run: |
+        image_name="ghcr.io/${{ github.repository }}/requests-hook"
+        cd hook
+        echo "Current directory: $(pwd)"
+        docker buildx build --push --tag "$image_name" . || echo "Failed to build hook image"
+        cd -
+        
