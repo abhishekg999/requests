@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -27,6 +28,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		body = []byte{}
 	}
+
+	for key := range r.Header {
+		fmt.Println(key, ":", r.Header.Get(key))
 
 	headers := http.Header{}
 	for key := range response.Headers {
