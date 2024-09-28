@@ -1,5 +1,7 @@
 FROM golang:latest
 
+LABEL org.opencontainers.image.source https://github.com/abhishekg999/requests
+
 # Set destination for COPY
 WORKDIR /app
 
