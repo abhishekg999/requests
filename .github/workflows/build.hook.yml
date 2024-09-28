@@ -30,19 +30,10 @@ jobs:
         registry: ${{ env.REGISTRY }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@v4
-      with:
-        images: ${{ env.REGISTRY }}/${{ github.repository }}/requests-hook
-        tags: latest
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
-        context: hook/
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        context: hook/  
+        tags: ${{ env.REGISTRY }}/${{ github.repository }}/requests-hook:latest
         push: true
-        
