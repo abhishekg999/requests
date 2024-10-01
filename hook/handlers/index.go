@@ -3,23 +3,38 @@ package handlers
 import (
 	"io"
 	"net/http"
+	"os"
+	"regexp"
 	"strings"
 	"time"
 	"webhooks/db"
 )
 
+func GetEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
+
+func FullURL(r *http.Request) string {
+	return r.Host + r.URL.String()
+}
+
+var BIN_REGEX = regexp.MustCompile(GetEnv("BIN_REGEX", `^(?:[a-zA-Z0-9-_.]+?)(?:\:\d+)?/(?<bin>\w*)(?:/.*)?$`))
+
 func Index(w http.ResponseWriter, r *http.Request) {
-	host := r.Host
-	parts := strings.Split(host, ".")
-	if len(parts) < 4 {
-		http.Error(w, "Invalid host format", http.StatusBadRequest)
+	url := FullURL(r)
+	match := BIN_REGEX.FindStringSubmatch(url)
+
+	if match == nil || len(match) != 2 {
+		http.Error(w, "Invalid url format", http.StatusBadRequest)
 		return
 	}
-
-	bin := parts[0]
+	bin := match[1]
 	response, err := db.GetResponseForBin(bin)
 	if err != nil {
-		http.Error(w, "Bin not found", http.StatusNotFound)
+		http.Error(w, "Bin: "+bin+" not found", http.StatusNotFound)
 		return
 	}
 
