@@ -36,3 +36,5 @@ Webhook page runs on `http://localhost:8080`.
 - Add API routes and UI to customise the response content
 - I should prob host it somewhere...
 
+## Notes:
+- Using the default method of bins, since the bin id is in the path, it will also show up in the request text.
